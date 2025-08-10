@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="shubhamgoatfr - My messy journey through design. From complete disasters to... slightly less disasters.">
+    <meta name="description" content="shubhamgoatfr - 2 years of design evolution. From beginner disasters to fire creations.">
+    <meta name="keywords" content="design, portfolio, graphic design, cover art, creative, shubhamgoatfr">
+    <meta name="author" content="shubhamgoatfr">
+    <meta property="og:title" content="shubhamgoatfr - still figuring it out">
+    <meta property="og:description" content="2 years of design evolution. From complete disasters to fire creations.">
+    <meta property="og:type" content="website">
     
     <title>shubhamgoatfr - still figuring it out</title>
     
-    <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐐</text></svg>">
     <link rel="stylesheet" href="styles.css">
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="styles.css">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -39,7 +43,6 @@
     </script>
     
     <style>
-        /* Better responsive typography */
         .hero-title {
             font-size: clamp(2.5rem, 8vw, 7rem);
             line-height: 0.9;
@@ -67,7 +70,6 @@
             line-height: 1.7;
         }
         
-        /* Interactive Background Elements */
         .bg-interactive {
             position: fixed;
             top: 0;
@@ -105,12 +107,8 @@
                 transform: translateY(100vh) translateX(0) rotate(0deg);
                 opacity: 0;
             }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
             100% {
                 transform: translateY(-100px) translateX(100px) rotate(360deg);
                 opacity: 0;
@@ -160,7 +158,6 @@
             }
         }
         
-        /* Mouse follower */
         .cursor-follower {
             position: fixed;
             width: 20px;
@@ -173,7 +170,6 @@
             mix-blend-mode: screen;
         }
         
-        /* Grid overlay */
         .grid-overlay {
             position: fixed;
             top: 0;
@@ -189,7 +185,6 @@
             opacity: 0.3;
         }
         
-        /* Smooth animations */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
@@ -209,14 +204,12 @@
         .slide-in { animation: slideIn 0.8s ease-out; }
         .float { animation: float 6s ease-in-out infinite; }
         
-        /* Progress bar */
         .progress-bar {
             transform-origin: left;
             transition: transform 0.2s ease-out;
             background: linear-gradient(90deg, #64748b 0%, #94a3b8 50%, #e2e8f0 100%);
         }
         
-        /* Gallery - Bigger artwork display */
         .gallery {
             display: grid;
             gap: 1.5rem;
@@ -224,7 +217,6 @@
             margin: 0 auto;
         }
         
-        /* Mobile: 1 column */
         @media (max-width: 639px) {
             .gallery {
                 grid-template-columns: 1fr;
@@ -233,7 +225,6 @@
             }
         }
         
-        /* Tablet: 2 columns */
         @media (min-width: 640px) and (max-width: 1023px) {
             .gallery {
                 grid-template-columns: 1fr 1fr;
@@ -241,7 +232,6 @@
             }
         }
         
-        /* Desktop: 3 columns */
         @media (min-width: 1024px) {
             .gallery {
                 grid-template-columns: 1fr 1fr 1fr;
@@ -249,7 +239,6 @@
             }
         }
         
-        /* Large screens: 4 columns */
         @media (min-width: 1600px) {
             .gallery {
                 grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -257,7 +246,6 @@
             }
         }
         
-        /* Artwork cards - Much bigger and better */
         .artwork {
             position: relative;
             overflow: hidden;
@@ -271,15 +259,11 @@
         }
         
         @media (min-width: 640px) {
-            .artwork {
-                min-height: 400px;
-            }
+            .artwork { min-height: 400px; }
         }
         
         @media (min-width: 1024px) {
-            .artwork {
-                min-height: 450px;
-            }
+            .artwork { min-height: 450px; }
         }
         
         .artwork:hover {
@@ -299,7 +283,6 @@
             transform: scale(1.08);
         }
         
-        /* Featured artwork - spans 2 columns */
         .artwork-featured {
             grid-column: span 1;
         }
@@ -318,7 +301,6 @@
             }
         }
         
-        /* Achievement cards - Simplified for images only */
         .achievements-gallery {
             display: grid;
             gap: 1.5rem;
@@ -359,15 +341,11 @@
         }
         
         @media (min-width: 640px) {
-            .achievement-card {
-                min-height: 280px;
-            }
+            .achievement-card { min-height: 280px; }
         }
         
         @media (min-width: 1024px) {
-            .achievement-card {
-                min-height: 300px;
-            }
+            .achievement-card { min-height: 300px; }
         }
         
         .achievement-card:hover {
@@ -388,7 +366,6 @@
             transform: scale(1.05);
         }
         
-        /* Artwork number overlay */
         .artwork-number {
             position: absolute;
             top: 1rem;
@@ -411,7 +388,6 @@
             transform: translateY(0);
         }
         
-        /* Year markers with better styling */
         .year-marker {
             grid-column: 1 / -1;
             margin: 4rem 0 3rem 0;
@@ -443,7 +419,6 @@
             border-radius: 2rem;
         }
         
-        /* Social Links */
         .social-links {
             display: flex;
             flex-wrap: wrap;
@@ -480,13 +455,11 @@
             flex-shrink: 0;
         }
         
-        /* Lightbox improvements */
         .lightbox {
             backdrop-filter: blur(24px);
             background: rgba(8, 8, 12, 0.95);
         }
         
-        /* Mobile navigation */
         .mobile-nav {
             transform: translateY(-100%);
             transition: transform 0.3s ease;
@@ -496,7 +469,6 @@
             transform: translateY(0);
         }
         
-        /* Skeleton with better animation */
         .skeleton {
             background: linear-gradient(90deg, #1f1f24 25%, #2a2a2f 50%, #1f1f24 75%);
             background-size: 200% 100%;
@@ -511,7 +483,6 @@
             100% { background-position: 200% 0; }
         }
         
-        /* Loading states */
         .loading-dots {
             display: inline-flex;
             gap: 0.25rem;
@@ -533,29 +504,24 @@
             40% { transform: scale(1); }
         }
         
-        /* Smooth scrolling */
         html { scroll-behavior: smooth; }
         
-        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #141419; }
         ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #e2e8f0; }
         
-        /* Selection */
         ::selection {
             background: rgba(226, 232, 240, 0.2);
             color: #f1f5f9;
         }
         
-        /* Parallax elements */
         .parallax-element {
             position: absolute;
             opacity: 0.1;
             transition: transform 0.1s ease-out;
         }
         
-        /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
             .particle,
             .geometric-shape,
@@ -569,42 +535,30 @@
 </head>
 
 <body class="bg-dark text-text font-inter antialiased">
-    <!-- Interactive Background -->
     <div class="bg-interactive">
-        <!-- Grid overlay -->
         <div class="grid-overlay"></div>
-        
-        <!-- Floating particles -->
         <div id="particles"></div>
-        
-        <!-- Geometric shapes -->
         <div class="geometric-shape shape-1"></div>
         <div class="geometric-shape shape-2"></div>
         <div class="geometric-shape shape-3"></div>
-        
-        <!-- Parallax elements -->
         <div class="parallax-element" style="top: 10%; left: 5%; width: 2px; height: 2px; background: rgba(148, 163, 184, 0.3); border-radius: 50%;"></div>
         <div class="parallax-element" style="top: 30%; right: 10%; width: 1px; height: 1px; background: rgba(226, 232, 240, 0.4); border-radius: 50%;"></div>
         <div class="parallax-element" style="bottom: 40%; left: 15%; width: 3px; height: 3px; background: rgba(148, 163, 184, 0.2); border-radius: 50%;"></div>
         <div class="parallax-element" style="bottom: 20%; right: 20%; width: 1.5px; height: 1.5px; background: rgba(226, 232, 240, 0.3); border-radius: 50%;"></div>
     </div>
     
-    <!-- Cursor follower -->
     <div class="cursor-follower" id="cursor-follower"></div>
 
-    <!-- Progress bar -->
     <div class="fixed top-0 left-0 w-full h-1 bg-border z-50">
         <div id="progress-bar" class="progress-bar h-full w-0"></div>
     </div>
 
-    <!-- Simple mobile nav toggle -->
     <button id="nav-toggle" class="fixed top-4 right-4 z-50 md:hidden w-12 h-12 bg-surface/80 backdrop-blur-sm border border-border rounded-full flex items-center justify-center text-muted hover:text-accent transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
     </button>
 
-    <!-- Mobile nav menu - Updated order -->
     <nav id="mobile-nav" class="mobile-nav fixed top-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md border-b border-border md:hidden">
         <div class="pt-20 pb-6 px-6">
             <div class="space-y-4 text-center">
@@ -616,215 +570,195 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="hero" class="relative min-h-screen flex flex-col justify-center items-center px-4 py-20 overflow-hidden">
-        <div class="max-w-6xl mx-auto text-center relative z-10">
-            <!-- Main title -->
-            <div class="fade-up mb-12">
-                <h1 class="font-space font-bold hero-title text-text mb-8">
-                    shubhamgoatfr
-                </h1>
-                
-                <div class="max-w-4xl mx-auto space-y-6">
-                    <p class="big-text text-muted font-medium">
-                        2 years in, finally getting somewhere
-                    </p>
+    <main>
+        <section id="hero" class="relative min-h-screen flex flex-col justify-center items-center px-4 py-20 overflow-hidden">
+            <div class="max-w-6xl mx-auto text-center relative z-10">
+                <header class="fade-up mb-12">
+                    <h1 class="font-space font-bold hero-title text-text mb-8">
+                        shubhamgoatfr
+                    </h1>
                     
-                    <div class="w-24 h-1 bg-accent mx-auto"></div>
-                    
-                    <p class="body-large text-muted/90 max-w-3xl mx-auto">
-                        started this design thing mid-2023 cause i was bored. 
-                        turns out making stuff look good is harder than youtube tutorials made it seem.
-                    </p>
-                    
-                    <p class="body-text text-muted/70 italic">
-                        (but lowkey i think i'm getting pretty decent at this... maybe?)
-                    </p>
-                </div>
-            </div>
-
-            <!-- Updated stats for 2 years -->
-            <div class="fade-up grid grid-cols-3 gap-6 max-w-sm mx-auto mb-16" style="animation-delay: 0.3s;">
-                <div class="text-center">
-                    <div class="text-3xl md:text-4xl font-bold text-accent mb-1">75+</div>
-                    <div class="text-xs md:text-sm text-muted">attempts</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl md:text-4xl font-bold text-accent mb-1">2</div>
-                    <div class="text-xs md:text-sm text-muted">years</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl md:text-4xl font-bold text-accent mb-1">📈</div>
-                    <div class="text-xs md:text-sm text-muted">improving</div>
-                </div>
-            </div>
-
-            <!-- Scroll hint -->
-            <div class="fade-up" style="animation-delay: 0.6s;">
-                <p class="text-sm text-muted/60 mb-4">scroll to see 2 years of growth</p>
-                <div class="w-6 h-10 border-2 border-muted/40 rounded-full mx-auto flex justify-center">
-                    <div class="w-1 h-3 bg-muted rounded-full mt-2 animate-bounce"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About -->
-    <section class="py-16 md:py-24 px-4 bg-surface/30">
-        <div class="max-w-4xl mx-auto text-center">
-            <div class="space-y-6 md:space-y-8">
-                <p class="body-large text-muted/90 leading-relaxed slide-in">
-                    mid-2023 i was scrolling through instagram, saw some cool cover art, 
-                    thought "how hard can this be?" spoiler alert: pretty fucking hard.
-                </p>
-                
-                <p class="body-large text-muted/90 leading-relaxed slide-in" style="animation-delay: 0.2s;">
-                    spent my first few months making absolute trash. like genuinely terrible stuff. 
-                    but something kept me going... probably stubbornness.
-                </p>
-                
-                <p class="body-large text-muted/90 leading-relaxed slide-in" style="animation-delay: 0.4s;">
-                    now after 2 years and 75+ designs, i'm starting to think i might actually have 
-                    some serious talent for this. or i'm just really good at lying to myself.
-                </p>
-                
-                <div class="flex items-center justify-center gap-3 pt-4 slide-in" style="animation-delay: 0.6s;">
-                    <span class="text-2xl">🐐</span>
-                    <span class="body-text text-muted/70 italic">getting goat-ish vibes—fr.</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Work Section -->
-    <section id="work" class="py-20 md:py-32 px-4">
-        <div class="max-w-7xl mx-auto">
-            <!-- Header -->
-            <div class="text-center mb-16 md:mb-24">
-                <h2 class="font-space font-bold section-title text-text mb-6">
-                    2 years of trial and error
-                </h2>
-                <p class="body-large text-muted max-w-2xl mx-auto">
-                    from absolute beginner disasters to "wait, this actually looks fire" moments. 
-                    chronological order so you can see the exact moment i stopped sucking.
-                </p>
-            </div>
-            
-            <!-- Gallery -->
-            <div id="gallery-container" class="gallery">
-                <!-- Artwork will be populated by JavaScript -->
-            </div>
-            
-            <!-- Loading -->
-            <div id="loading-indicator" class="hidden text-center mt-16 md:mt-24">
-                <div class="inline-flex items-center gap-4 px-6 py-4 bg-surface border border-border rounded-full">
-                    <div class="loading-dots">
-                        <div class="loading-dot"></div>
-                        <div class="loading-dot"></div>
-                        <div class="loading-dot"></div>
+                    <div class="max-w-4xl mx-auto space-y-6">
+                        <p class="big-text text-muted font-medium">
+                            2 years in, finally getting somewhere
+                        </p>
+                        
+                        <div class="w-24 h-1 bg-accent mx-auto"></div>
+                        
+                        <p class="body-large text-muted/90 max-w-3xl mx-auto">
+                            started this design thing mid-2023 cause i was bored. 
+                            turns out making stuff look good is harder than youtube tutorials made it seem.
+                        </p>
+                        
+                        <p class="body-text text-muted/70 italic">
+                            (but lowkey i think i'm getting pretty decent at this... maybe?)
+                        </p>
                     </div>
-                    <span class="body-text text-muted">loading more questionable decisions...</span>
+                </header>
+
+                <div class="fade-up grid grid-cols-3 gap-6 max-w-sm mx-auto mb-16" style="animation-delay: 0.3s;">
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-accent mb-1">75+</div>
+                        <div class="text-xs md:text-sm text-muted">attempts</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-accent mb-1">2</div>
+                        <div class="text-xs md:text-sm text-muted">years</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-accent mb-1">📈</div>
+                        <div class="text-xs md:text-sm text-muted">improving</div>
+                    </div>
+                </div>
+
+                <div class="fade-up" style="animation-delay: 0.6s;">
+                    <p class="text-sm text-muted/60 mb-4">scroll to see 2 years of growth</p>
+                    <div class="w-6 h-10 border-2 border-muted/40 rounded-full mx-auto flex justify-center">
+                        <div class="w-1 h-3 bg-muted rounded-full mt-2 animate-bounce"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 md:py-24 px-4 bg-surface/30">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="space-y-6 md:space-y-8">
+                    <p class="body-large text-muted/90 leading-relaxed slide-in">
+                        mid-2023 i was scrolling through instagram, saw some cool cover art, 
+                        thought "how hard can this be?" spoiler alert: pretty fucking hard.
+                    </p>
+                    
+                    <p class="body-large text-muted/90 leading-relaxed slide-in" style="animation-delay: 0.2s;">
+                        spent my first few months making absolute trash. like genuinely terrible stuff. 
+                        but something kept me going... probably stubbornness.
+                    </p>
+                    
+                    <p class="body-large text-muted/90 leading-relaxed slide-in" style="animation-delay: 0.4s;">
+                        now after 2 years and 75+ designs, i'm starting to think i might actually have 
+                        some serious talent for this. or i'm just really good at lying to myself.
+                    </p>
+                    
+                    <div class="flex items-center justify-center gap-3 pt-4 slide-in" style="animation-delay: 0.6s;">
+                        <span class="text-2xl">🐐</span>
+                        <span class="body-text text-muted/70 italic">getting goat-ish vibes—fr.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="work" class="py-20 md:py-32 px-4">
+            <div class="max-w-7xl mx-auto">
+                <header class="text-center mb-16 md:mb-24">
+                    <h2 class="font-space font-bold section-title text-text mb-6">
+                        2 years of trial and error
+                    </h2>
+                    <p class="body-large text-muted max-w-2xl mx-auto">
+                        from absolute beginner disasters to "wait, this actually looks fire" moments. 
+                        chronological order so you can see the exact moment i stopped sucking.
+                    </p>
+                </header>
+                
+                <div id="gallery-container" class="gallery"></div>
+                
+                <div id="loading-indicator" class="hidden text-center mt-16 md:mt-24">
+                    <div class="inline-flex items-center gap-4 px-6 py-4 bg-surface border border-border rounded-full">
+                        <div class="loading-dots">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
+                        <span class="body-text text-muted">loading more questionable decisions...</span>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-16 md:mt-24">
+                    <button id="load-more-btn" class="hidden px-8 py-4 body-text bg-surface border border-border text-muted hover:text-accent hover:border-accent transition-all duration-300 rounded-full">
+                        show me more growth
+                    </button>
                 </div>
             </div>
             
-            <!-- Load more -->
-            <div class="text-center mt-16 md:mt-24">
-                <button id="load-more-btn" class="hidden px-8 py-4 body-text bg-surface border border-border text-muted hover:text-accent hover:border-accent transition-all duration-300 rounded-full">
-                    show me more growth
-                </button>
-            </div>
-        </div>
-        
-        <div id="sentinel" class="h-1"></div>
-    </section>
+            <div id="sentinel" class="h-1"></div>
+        </section>
 
-    <!-- Achievements Section - Dynamic Images -->
-    <section id="achievements" class="py-20 md:py-32 px-4 bg-surface/20">
-        <div class="max-w-7xl mx-auto">
-            <!-- Header -->
-            <div class="text-center mb-16 md:mb-24">
+        <section id="achievements" class="py-20 md:py-32 px-4 bg-surface/20">
+            <div class="max-w-7xl mx-auto">
+                <header class="text-center mb-16 md:mb-24">
+                    <h2 class="font-space font-bold section-title text-text mb-6">
+                        wait, people actually noticed?
+                    </h2>
+                    <p class="body-large text-muted max-w-2xl mx-auto">
+                        apparently some of my work didn't completely suck. here's proof that 
+                        maybe i'm not as delusional as i thought.
+                    </p>
+                </header>
+                
+                <div id="achievements-container" class="achievements-gallery"></div>
+                
+                <div id="no-achievements" class="hidden text-center py-16">
+                    <div class="text-6xl mb-4">🏆</div>
+                    <p class="body-large text-muted/70 italic">
+                        achievements loading... or maybe i'm still working on them 👀
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-16 md:py-24 px-4 bg-surface/30">
+            <div class="max-w-3xl mx-auto text-center">
                 <h2 class="font-space font-bold section-title text-text mb-6">
-                    wait, people actually noticed?
+                    let's create something?
                 </h2>
-                <p class="body-large text-muted max-w-2xl mx-auto">
-                    apparently some of my work didn't completely suck. here's proof that 
-                    maybe i'm not as delusional as i thought.
+                
+                <p class="body-large text-muted mb-10 max-w-2xl mx-auto">
+                    2 years in and i'm hungry to work on cool projects. 
+                    got the skills now, just need the right opportunity to show what i can do.
                 </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                    <a href="mailto:hello@shubhamgoatfr.com" 
+                       class="px-6 py-3 body-text bg-accent text-dark hover:bg-white transition-all duration-300 rounded-full font-medium">
+                        hit me up
+                    </a>
+                    <a href="https://instagram.com/shubhamgoatfr" target="_blank" rel="noopener noreferrer"
+                       class="px-6 py-3 body-text border border-border text-muted hover:text-accent hover:border-accent transition-all duration-300 rounded-full">
+                        follow the journey
+                    </a>
+                </div>
+                
+                <div class="social-links">
+                    <a href="https://instagram.com/shubhamgoatfr" target="_blank" rel="noopener noreferrer" class="social-link">
+                        <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                        <span>shubhamgoatfr</span>
+                    </a>
+                    
+                    <a href="https://x.com/Stanking4lyf" target="_blank" rel="noopener noreferrer" class="social-link">
+                        <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                        <span>@Stanking4lyf</span>
+                    </a>
+                    
+                    <a href="https://pinterest.com/Stanking4lyf" target="_blank" rel="noopener noreferrer" class="social-link">
+                        <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.097.118.112.222.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.746-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.001z"/>
+                        </svg>
+                        <span>Stanking4lyf</span>
+                    </a>
+                    
+                    <a href="https://t.me/shubhamgoatfr" target="_blank" rel="noopener noreferrer" class="social-link">
+                        <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                        </svg>
+                        <span>shubhamgoatfr</span>
+                    </a>
+                </div>
             </div>
-            
-            <!-- Achievement Gallery - Dynamic Loading -->
-            <div id="achievements-container" class="achievements-gallery">
-                <!-- Achievements will be dynamically loaded here -->
-            </div>
-            
-            <!-- Achievement message if empty -->
-            <div id="no-achievements" class="hidden text-center py-16">
-                <div class="text-6xl mb-4">🏆</div>
-                <p class="body-large text-muted/70 italic">
-                    achievements loading... or maybe i'm still working on them 👀
-                </p>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Contact -->
-    <section id="contact" class="py-16 md:py-24 px-4 bg-surface/30">
-        <div class="max-w-3xl mx-auto text-center">
-            <h2 class="font-space font-bold section-title text-text mb-6">
-                let's create something?
-            </h2>
-            
-            <p class="body-large text-muted mb-10 max-w-2xl mx-auto">
-                2 years in and i'm hungry to work on cool projects. 
-                got the skills now, just need the right opportunity to show what i can do.
-            </p>
-            
-            <!-- Main CTA -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                <a href="mailto:hello@shubhamgoatfr.com" 
-                   class="px-6 py-3 body-text bg-accent text-dark hover:bg-white transition-all duration-300 rounded-full font-medium">
-                    hit me up
-                </a>
-                <a href="https://instagram.com/shubhamgoatfr" target="_blank" rel="noopener noreferrer"
-                   class="px-6 py-3 body-text border border-border text-muted hover:text-accent hover:border-accent transition-all duration-300 rounded-full">
-                    follow the journey
-                </a>
-            </div>
-            
-            <!-- Social Links -->
-            <div class="social-links">
-                <a href="https://instagram.com/shubhamgoatfr" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                    </svg>
-                    <span>shubhamgoatfr</span>
-                </a>
-                
-                <a href="https://x.com/Stanking4lyf" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                    </svg>
-                    <span>@Stanking4lyf</span>
-                </a>
-                
-                <a href="https://pinterest.com/Stanking4lyf" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.097.118.112.222.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.746-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.001z"/>
-                    </svg>
-                    <span>Stanking4lyf</span>
-                </a>
-                
-                <a href="https://t.me/shubhamgoatfr" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                    </svg>
-                    <span>shubhamgoatfr</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer class="py-8 md:py-12 px-4 border-t border-border">
         <div class="max-w-4xl mx-auto text-center">
             <p class="text-muted/70 mb-2 text-sm md:text-base">
@@ -836,34 +770,28 @@
         </div>
     </footer>
 
-    <!-- Achievement Lightbox -->
     <div id="achievement-lightbox" class="hidden fixed inset-0 lightbox z-50 flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="relative w-full h-full flex items-center justify-center p-4 md:p-8">
-            <!-- Close -->
             <button id="achievement-lightbox-close" class="absolute top-4 right-4 md:top-8 md:right-8 w-12 h-12 bg-surface/90 hover:bg-surface border border-border rounded-full flex items-center justify-center group">
                 <svg class="w-5 h-5 group-hover:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </button>
 
-            <!-- Image -->
             <div class="relative max-w-4xl max-h-full">
                 <img id="achievement-lightbox-img" src="" alt="" class="max-w-full max-h-full object-contain rounded-lg md:rounded-2xl shadow-2xl">
             </div>
         </div>
     </div>
 
-    <!-- Main Lightbox -->
     <div id="lightbox" class="hidden fixed inset-0 lightbox z-50 flex items-center justify-center opacity-0 transition-opacity duration-300">
         <div class="relative w-full h-full flex items-center justify-center p-4 md:p-8">
-            <!-- Close -->
             <button id="lightbox-close" class="absolute top-4 right-4 md:top-8 md:right-8 w-12 h-12 bg-surface/90 hover:bg-surface border border-border rounded-full flex items-center justify-center group">
                 <svg class="w-5 h-5 group-hover:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </button>
 
-            <!-- Navigation -->
             <button id="lightbox-prev" class="absolute left-4 md:left-8 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-surface/90 hover:bg-surface border border-border rounded-full flex items-center justify-center group">
                 <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -876,7 +804,6 @@
                 </svg>
             </button>
 
-            <!-- Image -->
             <div class="relative max-w-full max-h-full">
                 <img id="lightbox-img" src="" alt="" class="max-w-full max-h-full object-contain rounded-lg md:rounded-2xl shadow-2xl">
                 
@@ -888,7 +815,6 @@
         </div>
     </div>
 
-    <!-- Back to top -->
     <button id="back-to-top" class="hidden fixed bottom-6 right-6 md:bottom-8 md:right-8 w-12 h-12 bg-surface hover:bg-border border border-border rounded-full shadow-xl transition-all duration-300 z-40 flex items-center justify-center group">
         <svg class="w-5 h-5 group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
@@ -896,5 +822,7 @@
     </button>
 
     <script src="main.js"></script>
+    <script src="animation.js"></script>
+
 </body>
 </html>
