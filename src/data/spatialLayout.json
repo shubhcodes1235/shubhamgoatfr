@@ -1,0 +1,1442 @@
+[
+  {
+    "id": "poster-01",
+    "x": 0,
+    "y": 0,
+    "w": 496,
+    "h": 620,
+    "ratio": 0.8,
+    "isCenterpiece": true,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-02",
+    "x": 436,
+    "y": -43,
+    "w": 232,
+    "h": 290,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-03",
+    "x": -464,
+    "y": 5,
+    "w": 282,
+    "h": 350,
+    "ratio": 0.806,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-04",
+    "x": 555,
+    "y": 380,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-05",
+    "x": -458,
+    "y": 446,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-06",
+    "x": -463,
+    "y": -442,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-07",
+    "x": -34,
+    "y": -595,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-08",
+    "x": -3,
+    "y": 560,
+    "w": 317,
+    "h": 350,
+    "ratio": 0.9053,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "poster-09",
+    "x": 841,
+    "y": -185,
+    "w": 400,
+    "h": 500,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-10",
+    "x": -853,
+    "y": 20,
+    "w": 352,
+    "h": 410,
+    "ratio": 0.8588,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-11",
+    "x": 352,
+    "y": -595,
+    "w": 282,
+    "h": 350,
+    "ratio": 0.806,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-12",
+    "x": -799,
+    "y": -413,
+    "w": 232,
+    "h": 290,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-13",
+    "x": 956,
+    "y": 360,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.7995,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-14",
+    "x": -855,
+    "y": 478,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-15",
+    "x": 537,
+    "y": 830,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-16",
+    "x": 733,
+    "y": -743,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "poster-17",
+    "x": -1314,
+    "y": 27,
+    "w": 400,
+    "h": 500,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-18",
+    "x": 1254,
+    "y": -129,
+    "w": 282,
+    "h": 350,
+    "ratio": 0.806,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-19",
+    "x": -569,
+    "y": -858,
+    "w": 600,
+    "h": 337,
+    "ratio": 1.7778,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-20",
+    "x": -178,
+    "y": 983,
+    "w": 317,
+    "h": 350,
+    "ratio": 0.9053,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-21",
+    "x": -1169,
+    "y": -555,
+    "w": 350,
+    "h": 350,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-22",
+    "x": -676,
+    "y": 939,
+    "w": 410,
+    "h": 410,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-23",
+    "x": -1,
+    "y": -1046,
+    "w": 350,
+    "h": 350,
+    "ratio": 1.0014,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-24",
+    "x": 1336,
+    "y": 390,
+    "w": 281,
+    "h": 350,
+    "ratio": 0.8024,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "poster-25",
+    "x": 1018,
+    "y": 920,
+    "w": 500,
+    "h": 500,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-26",
+    "x": -1246,
+    "y": 565,
+    "w": 350,
+    "h": 350,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-27",
+    "x": 1220,
+    "y": -562,
+    "w": 205,
+    "h": 290,
+    "ratio": 0.7071,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-28",
+    "x": 1638,
+    "y": -176,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-29",
+    "x": 655,
+    "y": -1126,
+    "w": 600,
+    "h": 200,
+    "ratio": 3,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-30",
+    "x": 193,
+    "y": 1000,
+    "w": 197,
+    "h": 350,
+    "ratio": 0.5625,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-31",
+    "x": -1752,
+    "y": -7,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-32",
+    "x": -505,
+    "y": -1243,
+    "w": 516,
+    "h": 290,
+    "ratio": 1.7778,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "poster-33",
+    "x": -1629,
+    "y": -569,
+    "w": 400,
+    "h": 500,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-34",
+    "x": -1128,
+    "y": 1017,
+    "w": 277,
+    "h": 410,
+    "ratio": 0.6746,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-35",
+    "x": 1709,
+    "y": 288,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-36",
+    "x": -1157,
+    "y": -1022,
+    "w": 350,
+    "h": 350,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-37",
+    "x": 527,
+    "y": 1294,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-38",
+    "x": -1657,
+    "y": 523,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-39",
+    "x": 1168,
+    "y": -992,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-40",
+    "x": 1509,
+    "y": -729,
+    "w": 231,
+    "h": 410,
+    "ratio": 0.5625,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "poster-41",
+    "x": 7,
+    "y": 1496,
+    "w": 400,
+    "h": 500,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-42",
+    "x": 1463,
+    "y": 808,
+    "w": 232,
+    "h": 290,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-43",
+    "x": -621,
+    "y": 1424,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-44",
+    "x": 47,
+    "y": -1478,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-45",
+    "x": 2017,
+    "y": -245,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-46",
+    "x": 1864,
+    "y": -705,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-47",
+    "x": -1544,
+    "y": 964,
+    "w": 232,
+    "h": 290,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-48",
+    "x": 556,
+    "y": -1476,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "poster-49",
+    "x": 2142,
+    "y": 336,
+    "w": 400,
+    "h": 500,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-50",
+    "x": -2024,
+    "y": 459,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-51",
+    "x": 928,
+    "y": 1429,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-52",
+    "x": -2161,
+    "y": -100,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-53",
+    "x": 1840,
+    "y": 880,
+    "w": 350,
+    "h": 350,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-54",
+    "x": -1045,
+    "y": -1446,
+    "w": 350,
+    "h": 350,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-55",
+    "x": -1652,
+    "y": -1119,
+    "w": 410,
+    "h": 410,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-56",
+    "x": 954,
+    "y": -1480,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "poster-57",
+    "x": -493,
+    "y": -1709,
+    "w": 400,
+    "h": 500,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-58",
+    "x": -2078,
+    "y": -616,
+    "w": 330,
+    "h": 410,
+    "ratio": 0.806,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-59",
+    "x": -1023,
+    "y": 1475,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-60",
+    "x": 1518,
+    "y": -1194,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-61",
+    "x": -1894,
+    "y": 1013,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-62",
+    "x": 1459,
+    "y": 1185,
+    "w": 232,
+    "h": 290,
+    "ratio": 0.7995,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-63",
+    "x": 2386,
+    "y": -351,
+    "w": 301,
+    "h": 350,
+    "ratio": 0.8588,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-64",
+    "x": 475,
+    "y": 1804,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "poster-65",
+    "x": -2429,
+    "y": 523,
+    "w": 354,
+    "h": 500,
+    "ratio": 0.7082,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-66",
+    "x": -1489,
+    "y": 1356,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-67",
+    "x": 1332,
+    "y": 1615,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-68",
+    "x": 2229,
+    "y": 848,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-69",
+    "x": 1899,
+    "y": -1183,
+    "w": 233,
+    "h": 350,
+    "ratio": 0.6667,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-70",
+    "x": 2296,
+    "y": -829,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-71",
+    "x": -2547,
+    "y": -138,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-72",
+    "x": 2505,
+    "y": 41,
+    "w": 163,
+    "h": 290,
+    "ratio": 0.5625,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "poster-73",
+    "x": 1859,
+    "y": 1426,
+    "w": 400,
+    "h": 500,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-74",
+    "x": 1323,
+    "y": -1618,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-75",
+    "x": 167,
+    "y": -1906,
+    "w": 600,
+    "h": 341,
+    "ratio": 1.7607,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-76",
+    "x": -2118,
+    "y": -1121,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-77",
+    "x": -442,
+    "y": 1845,
+    "w": 232,
+    "h": 290,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-78",
+    "x": -2490,
+    "y": -561,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-79",
+    "x": -1519,
+    "y": -1610,
+    "w": 410,
+    "h": 410,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-80",
+    "x": -951,
+    "y": 1910,
+    "w": 600,
+    "h": 314,
+    "ratio": 1.9081,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "poster-81",
+    "x": 2675,
+    "y": 541,
+    "w": 453,
+    "h": 500,
+    "ratio": 0.9053,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-82",
+    "x": 923,
+    "y": 1879,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-83",
+    "x": 749,
+    "y": -1903,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-84",
+    "x": 93,
+    "y": 1999,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-85",
+    "x": -1863,
+    "y": 1521,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-86",
+    "x": -2284,
+    "y": 1033,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-87",
+    "x": -893,
+    "y": -1849,
+    "w": 234,
+    "h": 290,
+    "ratio": 0.806,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-88",
+    "x": 1708,
+    "y": -1664,
+    "w": 330,
+    "h": 410,
+    "ratio": 0.806,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "poster-89",
+    "x": 2870,
+    "y": -29,
+    "w": 400,
+    "h": 500,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-90",
+    "x": 2249,
+    "y": -1291,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-91",
+    "x": -2863,
+    "y": 317,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-92",
+    "x": -1447,
+    "y": 1773,
+    "w": 232,
+    "h": 290,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-93",
+    "x": 2671,
+    "y": -778,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-94",
+    "x": -2551,
+    "y": -1013,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-95",
+    "x": 2327,
+    "y": 1275,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-96",
+    "x": -1937,
+    "y": -1593,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "poster-97",
+    "x": -2958,
+    "y": -330,
+    "w": 400,
+    "h": 500,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-98",
+    "x": -393,
+    "y": -2215,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-99",
+    "x": 1124,
+    "y": -2054,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-100",
+    "x": -2662,
+    "y": 1088,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-101",
+    "x": -2254,
+    "y": 1484,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-102",
+    "x": -289,
+    "y": 2206,
+    "w": 232,
+    "h": 290,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-103",
+    "x": 2720,
+    "y": 1084,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-104",
+    "x": -1271,
+    "y": -2066,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "poster-105",
+    "x": 3082,
+    "y": -728,
+    "w": 400,
+    "h": 500,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "poster-106",
+    "x": 1338,
+    "y": 2102,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "poster-107",
+    "x": 525,
+    "y": 2236,
+    "w": 232,
+    "h": 290,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "poster-108",
+    "x": 2092,
+    "y": -1732,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "poster-109",
+    "x": 87,
+    "y": -2359,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "poster-110",
+    "x": -818,
+    "y": -2244,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "poster-111",
+    "x": 2608,
+    "y": -1292,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "poster-112",
+    "x": -2936,
+    "y": -869,
+    "w": 231,
+    "h": 410,
+    "ratio": 0.5625,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "social-01",
+    "x": 3226,
+    "y": 541,
+    "w": 500,
+    "h": 500,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "social-02",
+    "x": 531,
+    "y": -2327,
+    "w": 350,
+    "h": 350,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "social-03",
+    "x": 1791,
+    "y": 1974,
+    "w": 410,
+    "h": 410,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "social-04",
+    "x": -665,
+    "y": 2326,
+    "w": 350,
+    "h": 350,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "social-05",
+    "x": -2316,
+    "y": -1594,
+    "w": 290,
+    "h": 290,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "social-06",
+    "x": -1850,
+    "y": 2009,
+    "w": 410,
+    "h": 410,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "social-07",
+    "x": 1566,
+    "y": -2117,
+    "w": 350,
+    "h": 350,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "social-08",
+    "x": -1662,
+    "y": -2076,
+    "w": 350,
+    "h": 350,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "social-09",
+    "x": 2380,
+    "y": 1778,
+    "w": 500,
+    "h": 500,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "social-10",
+    "x": -3021,
+    "y": 749,
+    "w": 232,
+    "h": 290,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "social-11",
+    "x": -3237,
+    "y": 279,
+    "w": 263,
+    "h": 350,
+    "ratio": 0.7503,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "social-12",
+    "x": 91,
+    "y": 2449,
+    "w": 328,
+    "h": 410,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "social-13",
+    "x": 909,
+    "y": 2356,
+    "w": 302,
+    "h": 350,
+    "ratio": 0.8616,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "website-01",
+    "x": -1272,
+    "y": 2301,
+    "w": 600,
+    "h": 293,
+    "ratio": 2.0463,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "website-02",
+    "x": 3451,
+    "y": -92,
+    "w": 600,
+    "h": 293,
+    "ratio": 2.0463,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "website-03",
+    "x": -2787,
+    "y": 1540,
+    "w": 600,
+    "h": 293,
+    "ratio": 2.0496,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "website-04",
+    "x": -2837,
+    "y": -1489,
+    "w": 600,
+    "h": 295,
+    "ratio": 2.0343,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "application-01",
+    "x": -2252,
+    "y": -2010,
+    "w": 600,
+    "h": 328,
+    "ratio": 1.83,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "application-02",
+    "x": 2637,
+    "y": -1707,
+    "w": 600,
+    "h": 326,
+    "ratio": 1.843,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "application-03",
+    "x": -3513,
+    "y": -227,
+    "w": 569,
+    "h": 290,
+    "ratio": 1.9616,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "magazine-01",
+    "x": 2982,
+    "y": -1254,
+    "w": 317,
+    "h": 410,
+    "ratio": 0.7739,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "magazine-02",
+    "x": -2405,
+    "y": 1934,
+    "w": 525,
+    "h": 350,
+    "ratio": 1.4993,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "magazine-03",
+    "x": 3082,
+    "y": 1072,
+    "w": 247,
+    "h": 350,
+    "ratio": 0.707,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "magazine-04",
+    "x": -3301,
+    "y": -865,
+    "w": 333,
+    "h": 410,
+    "ratio": 0.8128,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  },
+  {
+    "id": "movie-01",
+    "x": -3416,
+    "y": 840,
+    "w": 337,
+    "h": 500,
+    "ratio": 0.6746,
+    "isCenterpiece": false,
+    "sectorIndex": 0
+  },
+  {
+    "id": "movie-02",
+    "x": 2826,
+    "y": 1562,
+    "w": 248,
+    "h": 350,
+    "ratio": 0.7082,
+    "isCenterpiece": false,
+    "sectorIndex": 1
+  },
+  {
+    "id": "movie-03",
+    "x": 960,
+    "y": -2513,
+    "w": 277,
+    "h": 410,
+    "ratio": 0.6746,
+    "isCenterpiece": false,
+    "sectorIndex": 2
+  },
+  {
+    "id": "newspaper-01",
+    "x": 2029,
+    "y": -2158,
+    "w": 350,
+    "h": 350,
+    "ratio": 1,
+    "isCenterpiece": false,
+    "sectorIndex": 3
+  },
+  {
+    "id": "newspaper-02",
+    "x": -1445,
+    "y": -2500,
+    "w": 600,
+    "h": 350,
+    "ratio": 1.7143,
+    "isCenterpiece": false,
+    "sectorIndex": 4
+  },
+  {
+    "id": "newspaper-03",
+    "x": -516,
+    "y": -2693,
+    "w": 600,
+    "h": 398,
+    "ratio": 1.5094,
+    "isCenterpiece": false,
+    "sectorIndex": 5
+  },
+  {
+    "id": "calendar-01",
+    "x": 3511,
+    "y": -496,
+    "w": 280,
+    "h": 350,
+    "ratio": 0.8,
+    "isCenterpiece": false,
+    "sectorIndex": 6
+  },
+  {
+    "id": "calendar-02",
+    "x": 1433,
+    "y": -2543,
+    "w": 525,
+    "h": 350,
+    "ratio": 1.5,
+    "isCenterpiece": false,
+    "sectorIndex": 7
+  }
+]
