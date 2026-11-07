@@ -2,17 +2,117 @@
 <html lang="en" class="dark bg-[#090909] text-neutral-100 antialiased selection:bg-neutral-100 selection:text-neutral-950">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>shubhamgoatfr — Visual Exhibition</title>
-    <meta name="description" content="A curated visual exhibition by shubhamgoatfr." />
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Primary Title & Meta Description -->
+    <title>Shubham Kumawat (Shubhamgoatfr) | Graphic Designer</title>
+    <meta
+      name="description"
+      content="Explore the graphic design portfolio of Shubham Kumawat, also known as Shubhamgoatfr, a graphic designer based in Ahmedabad, India. Discover cover art, posters and visual experiments."
+    />
+    <meta name="author" content="Shubham Kumawat (Shubhamgoatfr)" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://shubhamgoatfr.netlify.app/" />
+
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>" />
+    <meta name="theme-color" content="#090909" />
+    <meta name="color-scheme" content="dark" />
+
+    <!-- Open Graph / Facebook / WhatsApp / Discord / LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Shubhamgoatfr | Graphic Design Portfolio" />
+    <meta property="og:description" content="Explore cover art, posters and visual experiments by Shubham Kumawat." />
+    <meta property="og:url" content="https://shubhamgoatfr.netlify.app/" />
+    <meta property="og:site_name" content="Shubhamgoatfr" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:image" content="https://shubhamgoatfr.netlify.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="Shubham Kumawat (Shubhamgoatfr) — Graphic Design Portfolio & Exhibition" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Shubhamgoatfr | Graphic Design Portfolio" />
+    <meta name="twitter:description" content="An interactive exhibition of cover art, posters and visual experiments by Shubham Kumawat." />
+    <meta name="twitter:image" content="https://shubhamgoatfr.netlify.app/og-image.png" />
+    <meta name="twitter:image:alt" content="Shubham Kumawat (Shubhamgoatfr) — Graphic Design Portfolio" />
+    <meta name="twitter:site" content="@shubhamgoatfr" />
+    <meta name="twitter:creator" content="@shubhamgoatfr" />
+
+    <!-- Structured Data: Schema.org Person & WebSite Entities (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://shubhamgoatfr.netlify.app/#person",
+            "name": "Shubham Kumawat",
+            "alternateName": ["Shubhamgoatfr", "Shubham Goat"],
+            "jobTitle": "Graphic Designer",
+            "description": "Graphic designer specializing in cover art, poster design and digital visual compositions.",
+            "url": "https://shubhamgoatfr.netlify.app/",
+            "image": "https://shubhamgoatfr.netlify.app/og-image.png",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Ahmedabad",
+              "addressRegion": "Gujarat",
+              "addressCountry": "IN"
+            },
+            "sameAs": [
+              "https://pinterest.com/shubhamgoatfr",
+              "https://instagram.com/shubhamgoatfr",
+              "https://x.com/shubhamgoatfr"
+            ],
+            "knowsAbout": [
+              "Graphic Design",
+              "Cover Art",
+              "Music Artwork",
+              "Poster Design",
+              "Digital Art",
+              "Visual Design",
+              "Creative Compositions"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://shubhamgoatfr.netlify.app/#website",
+            "name": "Shubhamgoatfr",
+            "alternateName": "Shubham Kumawat Graphic Design Portfolio",
+            "url": "https://shubhamgoatfr.netlify.app/",
+            "description": "Graphic design portfolio and interactive digital exhibition.",
+            "inLanguage": "en-IN",
+            "creator": {
+              "@id": "https://shubhamgoatfr.netlify.app/#person"
+            }
+          }
+        ]
+      }
+    </script>
+
+    <!-- Performance: Fonts Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body class="bg-[#090909] text-neutral-200 overflow-x-hidden min-h-screen">
-    <div id="root"></div>
+    <div id="root">
+      <!-- Semantic Static Fallback for Search Engine Crawlers Prior to Client Hydration -->
+      <noscript>
+        <header style="padding: 24px; max-width: 1200px; margin: 0 auto; font-family: sans-serif;">
+          <h1>Shubham Kumawat (Shubhamgoatfr) — Graphic Designer</h1>
+          <p>
+            Graphic designer based in Ahmedabad, Gujarat, India. Specializing in music cover art,
+            posters, album artwork, and digital visual experiments. Please enable JavaScript to
+            explore the interactive infinite canvas exhibition.
+          </p>
+        </header>
+      </noscript>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,31 +1,74 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { X } from "lucide-react";
 import type { Artwork } from "@/data/artworks";
-import { ChevronLeft, ChevronRight, X, Play, Pause } from "lucide-react";
+import type { CanvasArtworkNode } from "@/hooks/useCollisionFreeCanvas";
 
-interface ArtworkViewerProps {
-  artworks: Artwork[];
+export interface ArtworkViewerProps {
+  nodes?: CanvasArtworkNode[];
+  artworks?: Artwork[];
   initialIndex: number;
   isOpen: boolean;
   onClose: () => void;
+  getCanvasRect?: (index: number) => {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  };
 }
 
 export const ArtworkViewer: React.FC<ArtworkViewerProps> = ({
+  nodes,
   artworks,
   initialIndex,
   isOpen,
   onClose,
 }) => {
+  const total = nodes?.length ?? artworks?.length ?? 0;
+
   const [indexOffset, setIndexOffset] = useState<number>(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
-  const [touchDeltaX, setTouchDeltaX] = useState<number>(0);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  const [pullDownY, setPullDownY] = useState(0);
 
-  const total = artworks.length;
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
+    if (isOpen) {
+      setIndexOffset(0);
+      setPullDownY(0);
+    }
+  }
 
-  // Derive current index from initialIndex + cumulative user offset
   const currentIndex = total > 0 ? (initialIndex + indexOffset + total * 1000) % total : 0;
+
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const lastActiveElementRef = useRef<HTMLElement | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const touchDeltaRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  const shouldReduceMotion = useReducedMotion();
+
+  // Focus close button whenever opening
+  useEffect(() => {
+    if (isOpen) {
+      lastActiveElementRef.current = document.activeElement as HTMLElement | null;
+
+      // Focus close button for keyboard accessibility
+      requestAnimationFrame(() => {
+        closeButtonRef.current?.focus();
+      });
+    }
+  }, [isOpen]);
+
+  const handleClose = useCallback(() => {
+    setPullDownY(0);
+    setIndexOffset(0);
+    onClose();
+    // Return focus to previously focused element on canvas
+    if (lastActiveElementRef.current) {
+      lastActiveElementRef.current.focus();
+    }
+  }, [onClose]);
 
   const nextArtwork = useCallback(() => {
     if (total === 0) return;
@@ -37,55 +80,39 @@ export const ArtworkViewer: React.FC<ArtworkViewerProps> = ({
     setIndexOffset((prev) => prev - 1);
   }, [total]);
 
-  const handleClose = useCallback(() => {
-    setIsPlaying(false);
-    setIndexOffset(0);
-    onClose();
-  }, [onClose]);
-
-  // Slideshow interval
-  useEffect(() => {
-    if (isPlaying && isOpen) {
-      timerRef.current = setInterval(nextArtwork, 3500);
-    } else {
-      if (timerRef.current) clearInterval(timerRef.current);
-    }
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [isPlaying, isOpen, nextArtwork]);
-
-  // Preload adjacent images (prev and next 2)
+  // Preload adjacent images for instantaneous arrow-key transitions
   useEffect(() => {
     if (!isOpen || total === 0) return;
     const preloadIndices = [
       (currentIndex - 1 + total) % total,
       (currentIndex + 1) % total,
-      (currentIndex + 2) % total,
     ];
     preloadIndices.forEach((idx) => {
-      const art = artworks[idx];
-      if (art?.image) {
+      const imgUrl = nodes ? nodes[idx]?.artwork?.image : artworks?.[idx]?.image;
+      if (imgUrl) {
         const img = new Image();
-        img.src = art.image;
+        img.src = imgUrl;
       }
     });
-  }, [currentIndex, isOpen, artworks, total]);
+  }, [currentIndex, isOpen, nodes, artworks, total]);
 
-  // Keyboard navigation
+  // Keyboard navigation & accessibility
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        e.preventDefault();
         handleClose();
       } else if (e.key === "ArrowRight") {
+        e.preventDefault();
         nextArtwork();
       } else if (e.key === "ArrowLeft") {
-        prevArtwork();
-      } else if (e.key === " ") {
         e.preventDefault();
-        setIsPlaying((p) => !p);
+        prevArtwork();
+      } else if (e.key === "Tab") {
+        e.preventDefault();
+        closeButtonRef.current?.focus();
       }
     };
 
@@ -93,124 +120,139 @@ export const ArtworkViewer: React.FC<ArtworkViewerProps> = ({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, nextArtwork, prevArtwork, handleClose]);
 
-  // Touch handlers for mobile swipe
+  // Mobile touch gestures: swipe down to close, swipe horizontal to navigate
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.touches[0].clientX);
-    setTouchDeltaX(0);
+    if (e.touches.length !== 1) return;
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+      time: performance.now(),
+    };
+    touchDeltaRef.current = { x: 0, y: 0 };
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (touchStartX === null) return;
-    const currentX = e.touches[0].clientX;
-    setTouchDeltaX(currentX - touchStartX);
+    if (!touchStartRef.current || e.touches.length !== 1) return;
+    const dx = e.touches[0].clientX - touchStartRef.current.x;
+    const dy = e.touches[0].clientY - touchStartRef.current.y;
+    touchDeltaRef.current = { x: dx, y: dy };
+
+    // If pulling down on mobile, give live elastic feedback
+    if (dy > 0 && Math.abs(dy) > Math.abs(dx)) {
+      setPullDownY(dy);
+    }
   };
 
   const handleTouchEnd = () => {
-    if (touchStartX === null) return;
-    const threshold = 50;
-    if (touchDeltaX < -threshold) {
-      nextArtwork();
-    } else if (touchDeltaX > threshold) {
-      prevArtwork();
+    if (!touchStartRef.current) return;
+    const { x: dx, y: dy } = touchDeltaRef.current;
+    const duration = performance.now() - touchStartRef.current.time;
+    const velocityY = duration > 0 ? dy / duration : 0;
+
+    // Swipe down to close threshold
+    if (dy > 70 || (dy > 30 && velocityY > 0.45)) {
+      handleClose();
+    } else if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
+      // Horizontal swipe to navigate
+      if (dx < 0) {
+        nextArtwork();
+      } else {
+        prevArtwork();
+      }
+      setPullDownY(0);
+    } else {
+      setPullDownY(0);
     }
-    setTouchStartX(null);
-    setTouchDeltaX(0);
+
+    touchStartRef.current = null;
+    touchDeltaRef.current = { x: 0, y: 0 };
   };
 
-  if (!isOpen) return null;
+  // Close when clicking outside the artwork on the black backdrop
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      handleClose();
+    }
+  };
 
-  const current = artworks[currentIndex] || artworks[0];
+  // Retrieve current artwork
+  const currentNode = nodes ? nodes[currentIndex] : null;
+  const currentArtwork: Artwork | undefined =
+    currentNode?.artwork || (artworks ? artworks[currentIndex] : undefined);
 
   return (
     <AnimatePresence>
-      <motion.div
-        key="artwork-viewer"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed inset-0 z-50 bg-[#090909] flex flex-col justify-between select-none"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        {/* Subtle Top Bar: minimal count, slideshow toggle, and close */}
-        <header className="w-full px-5 py-4 flex items-center justify-between z-30">
-          <span className="font-mono text-[11px] tracking-widest text-neutral-500">
-            {currentIndex + 1} / {total}
-          </span>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsPlaying((p) => !p)}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded text-[11px] font-mono tracking-wider transition-colors cursor-pointer ${
-                isPlaying
-                  ? "bg-white text-black font-medium"
-                  : "text-neutral-400 hover:text-white"
-              }`}
-              title="Toggle slideshow (Space)"
-            >
-              {isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
-              <span className="hidden sm:inline">{isPlaying ? "PAUSE" : "SLIDESHOW"}</span>
-            </button>
-
-            <button
-              onClick={handleClose}
-              className="p-1.5 text-neutral-400 hover:text-white transition-colors cursor-pointer"
-              title="Close (Esc)"
-              aria-label="Close viewer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </header>
-
-        {/* Central Artwork Showcase: Maximize screen occupancy, preserve exact aspect ratio */}
-        <main className="relative flex-1 w-full flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden">
-          {/* Left Arrow Zone */}
+      {isOpen && currentArtwork && (
+        <motion.div
+          key="fullscreen-artwork-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Fullscreen artwork exhibition"
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: pullDownY > 0 ? Math.max(0.35, 1 - pullDownY / 380) : 1,
+          }}
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: shouldReduceMotion ? 0.15 : 0.28,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          className="fixed inset-0 z-50 bg-black flex items-center justify-center p-4 sm:p-8 md:p-12 select-none cursor-default overflow-hidden"
+          onClick={handleBackdropClick}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
+          style={{
+            backgroundColor: "#000000",
+          }}
+        >
+          {/* ── Minimal Close Icon (Top-Right Corner) ── */}
           <button
-            onClick={prevArtwork}
-            className="absolute left-2 sm:left-4 z-20 p-2 text-neutral-500 hover:text-white transition-colors cursor-pointer"
-            aria-label="Previous artwork"
+            ref={closeButtonRef}
+            type="button"
+            onClick={handleClose}
+            className="fixed top-5 right-5 sm:top-7 sm:right-7 z-50 p-2.5 text-neutral-400 hover:text-white transition-colors rounded-full hover:bg-white/10 active:scale-95 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/40 cursor-pointer"
+            aria-label="Close fullscreen artwork (Escape)"
+            title="Close (Esc)"
           >
-            <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.5} />
           </button>
 
-          {/* Central Image with smooth fade & micro zoom transition */}
-          <div
-            onClick={nextArtwork}
-            className="relative max-w-full max-h-full flex items-center justify-center cursor-pointer"
+          {/* ── Distraction-Free Artwork with Smooth Zoom Transition ── */}
+          <motion.div
+            key={currentArtwork.id}
+            initial={
+              shouldReduceMotion
+                ? { opacity: 0 }
+                : { scale: 0.82, opacity: 0 }
+            }
+            animate={{
+              scale: pullDownY > 0 ? Math.max(0.78, 1 - pullDownY / 1000) : 1,
+              y: pullDownY > 0 ? pullDownY * 0.75 : 0,
+              opacity: 1,
+            }}
+            exit={
+              shouldReduceMotion
+                ? { opacity: 0 }
+                : { scale: 0.82, opacity: 0 }
+            }
+            transition={{
+              duration: shouldReduceMotion ? 0.15 : 0.32,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="relative max-w-full max-h-full flex items-center justify-center cursor-default"
+            onClick={(e) => e.stopPropagation()}
           >
-            <motion.img
-              key={current.id}
-              src={current.image}
-              alt=""
-              initial={{ opacity: 0, scale: 0.985 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className="max-h-[85vh] sm:max-h-[88vh] max-w-[94vw] sm:max-w-[90vw] w-auto h-auto object-contain rounded-xs"
+            <img
+              src={currentArtwork.image}
+              alt={`${currentArtwork.title} — ${currentArtwork.category} design by Shubham Kumawat (Shubhamgoatfr)`}
+              className="max-h-[85vh] sm:max-h-[88vh] max-w-[92vw] sm:max-w-[88vw] w-auto h-auto object-contain block select-none pointer-events-auto rounded-none"
               draggable={false}
             />
-          </div>
-
-          {/* Right Arrow Zone */}
-          <button
-            onClick={nextArtwork}
-            className="absolute right-2 sm:right-4 z-20 p-2 text-neutral-500 hover:text-white transition-colors cursor-pointer"
-            aria-label="Next artwork"
-          >
-            <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
-          </button>
-        </main>
-
-        {/* Bottom subtle hint bar */}
-        <footer className="w-full px-5 py-3 flex justify-center items-center z-30">
-          <span className="font-mono text-[10px] tracking-widest text-neutral-600 uppercase">
-            [← / →] Navigate &nbsp;·&nbsp; [SPACE] Slideshow &nbsp;·&nbsp; [ESC] Close
-          </span>
-        </footer>
-      </motion.div>
+          </motion.div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 };
