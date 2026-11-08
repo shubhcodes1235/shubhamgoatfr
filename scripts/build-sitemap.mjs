@@ -39,3 +39,4 @@ ${imagesXml}  </url>
 
 fs.writeFileSync("public/sitemap.xml", sitemap, "utf8");
 console.log("Successfully generated public/sitemap.xml with artwork images.");
+
