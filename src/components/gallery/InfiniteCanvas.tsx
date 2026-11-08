@@ -4,7 +4,6 @@ import {
   useCollisionFreeCanvas,
   type CanvasArtworkNode,
 } from "@/hooks/useCollisionFreeCanvas";
-import { ArtworkViewer } from "@/components/gallery/ArtworkViewer";
 import LightRays from "@/components/ui/LightRays";
 import { Plus, Minus, RotateCcw, Compass, ArrowUpRight } from "lucide-react";
 
@@ -45,14 +44,6 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
 
   // Destination tracker for guided Discover mode
   const [currentDestinationIdx, setCurrentDestinationIdx] = useState(0);
-
-  // Fullscreen exhibition modal state
-  const [focusedArtworkIndex, setFocusedArtworkIndex] = useState<number | null>(null);
-  const focusedArtworkIndexRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    focusedArtworkIndexRef.current = focusedArtworkIndex;
-  }, [focusedArtworkIndex]);
 
   // Pointer drag & momentum physics
   const isDraggingRef = useRef(false);
@@ -195,29 +186,6 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
     updateCulling();
   };
 
-  // Compute current screen bounding box for any artwork on canvas
-  const getCanvasRect = useCallback(
-    (index: number) => {
-      const node = artworkNodes[index];
-      if (!node) {
-        return {
-          left: typeof window !== "undefined" ? window.innerWidth / 2 : 0,
-          top: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
-          width: 0,
-          height: 0,
-        };
-      }
-      const { x, y, scale } = transformRef.current;
-      return {
-        left: x + (node.x - node.width / 2) * scale,
-        top: y + (node.y - node.height / 2) * scale,
-        width: node.width * scale,
-        height: node.height * scale,
-      };
-    },
-    [artworkNodes]
-  );
-
   // Smooth mouse wheel zoom anchored to pointer position
   useEffect(() => {
     const container = containerRef.current;
@@ -226,7 +194,6 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
     let wheelDebounce: ReturnType<typeof setTimeout> | null = null;
 
     const handleWheel = (e: WheelEvent) => {
-      if (focusedArtworkIndexRef.current !== null) return; // Prevent zooming while artwork is expanded
       e.preventDefault();
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
 
@@ -262,7 +229,6 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
 
   // Pointer drag events
   const onPointerDown = (e: React.PointerEvent) => {
-    if (focusedArtworkIndex !== null) return;
     if ((e.target as HTMLElement).closest("button, a, header, nav")) return;
 
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
@@ -276,7 +242,6 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
-    if (focusedArtworkIndex !== null) return;
     if (!isDraggingRef.current) return;
 
     const dx = e.clientX - lastPosRef.current.x;
@@ -303,7 +268,6 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
   };
 
   const onPointerUp = (e: React.PointerEvent) => {
-    if (focusedArtworkIndex !== null) return;
     if (!isDraggingRef.current) return;
     isDraggingRef.current = false;
     try {
@@ -312,28 +276,11 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
       // Released
     }
 
-    // If pointer was released without dragging, check if an artwork was tapped/clicked
-    if (!didMoveRef.current) {
-      const target = document.elementFromPoint(e.clientX, e.clientY);
-      const clickedImg = target?.closest("img");
-      if (clickedImg) {
-        const id = clickedImg.getAttribute("data-artwork-id");
-        if (id) {
-          const idx = artworkNodes.findIndex((n) => n.id === id);
-          if (idx !== -1) {
-            setFocusedArtworkIndex(idx);
-            return;
-          }
-        }
-      }
-    }
-
     startMomentum();
   };
 
   // Mobile pinch to zoom
   const onTouchStart = (e: React.TouchEvent) => {
-    if (focusedArtworkIndex !== null) return;
     if (e.touches.length === 2) {
       const t1 = e.touches[0];
       const t2 = e.touches[1];
@@ -343,7 +290,6 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
-    if (focusedArtworkIndex !== null) return;
     if (e.touches.length === 2 && pinchStartDistRef.current !== null) {
       const t1 = e.touches[0];
       const t2 = e.touches[1];
@@ -370,7 +316,6 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
   };
 
   const onTouchEnd = () => {
-    if (focusedArtworkIndex !== null) return;
     if (pinchStartDistRef.current !== null) {
       pinchStartDistRef.current = null;
       setZoomPercent(Math.round(transformRef.current.scale * 100));
@@ -378,10 +323,10 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
     }
   };
 
-  // Clicking an artwork: expand directly into distraction-free fullscreen viewer (preserves canvas position & zoom)
-  const handleArtworkClick = (_node: CanvasArtworkNode, originalIndex: number) => {
+  // Clicking an artwork: smoothly center the canvas camera on it
+  const handleArtworkClick = (node: CanvasArtworkNode) => {
     if (didMoveRef.current) return; // Prevent triggering click upon drag release
-    setFocusedArtworkIndex(originalIndex);
+    smoothTravelTo(node.x, node.y, transformRef.current.scale);
   };
 
   return (
@@ -409,12 +354,7 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
       </section>
 
       {/* ── Minimalist Editorial Header ── */}
-      <header
-        aria-hidden={focusedArtworkIndex !== null}
-        className={`fixed top-0 inset-x-0 z-40 px-6 sm:px-8 py-5 flex items-center justify-between pointer-events-none select-none transition-opacity duration-300 ${
-          focusedArtworkIndex !== null ? "opacity-0" : "opacity-100"
-        }`}
-      >
+      <header className="fixed top-0 inset-x-0 z-40 px-6 sm:px-8 py-5 flex items-center justify-between pointer-events-none select-none">
         <div className="pointer-events-auto flex items-baseline gap-2">
           <h1 className="font-sans text-sm sm:text-base tracking-[0.2em] uppercase font-semibold text-neutral-100">
             Shubham Kumawat
@@ -441,12 +381,7 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
       {/* ── Compact Navigation & Zoom Dock (Bottom Right) ── */}
       <nav
         aria-label="Exhibition controls"
-        aria-hidden={focusedArtworkIndex !== null}
-        className={`fixed bottom-6 right-6 z-40 flex items-center gap-2 p-1.5 rounded-full bg-[#111111]/90 backdrop-blur-md border border-white/6 shadow-2xl transition-opacity duration-300 ${
-          focusedArtworkIndex !== null
-            ? "opacity-0 pointer-events-none"
-            : "opacity-100 pointer-events-auto"
-        } select-none`}
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 p-1.5 rounded-full bg-[#111111]/90 backdrop-blur-md border border-white/6 shadow-2xl pointer-events-auto select-none"
       >
         <button
           onClick={handleDiscover}
@@ -495,32 +430,8 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
 
       {/* ── Atmospheric Exhibition Lighting (React Bits LightRays) ── */}
       <div
-        className="absolute inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-700"
-        style={{
-          opacity: focusedArtworkIndex !== null ? 0 : 0.45,
-        }}
-        aria-hidden="true"
-      >
-        <LightRays
-          raysOrigin="top-center"
-          raysColor="#ffffff"
-          raysSpeed={0.35}
-          lightSpread={0.85}
-          intensity={0.5}
-          glow={0.3}
-          haze={0.2}
-          followMouse={true}
-          mouseInfluence={0.15}
-          className="w-full h-full"
-        />
-      </div>
-
-      {/* ── Atmospheric Exhibition Lighting (React Bits LightRays) ── */}
-      <div
-        className="absolute inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-700"
-        style={{
-          opacity: focusedArtworkIndex !== null ? 0 : 0.45,
-        }}
+        className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
+        style={{ opacity: 0.45 }}
         aria-hidden="true"
       >
         <LightRays
@@ -540,10 +451,7 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
       {/* ── Single GPU-Accelerated Stage Transform ── */}
       <div
         ref={stageRef}
-        aria-hidden={focusedArtworkIndex !== null}
-        className={`absolute inset-0 origin-top-left will-change-transform ${
-          focusedArtworkIndex !== null ? "pointer-events-none" : ""
-        }`}
+        className="absolute inset-0 origin-top-left will-change-transform"
       >
         {/* Subtle Spatial Orientation Watermarks */}
         {destinations.map((d, idx) => (
@@ -588,14 +496,14 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
               alt={`${node.artwork.title} — ${node.artwork.category} design by Shubham Kumawat (Shubhamgoatfr)`}
               width={Math.round(node.width)}
               height={Math.round(node.height)}
-              tabIndex={focusedArtworkIndex !== null ? -1 : 0}
+              tabIndex={0}
               role="button"
-              aria-label={`View ${node.artwork.title} (${node.artwork.category})`}
-              onClick={() => handleArtworkClick(node, index)}
+              aria-label={`Center ${node.artwork.title} (${node.artwork.category})`}
+              onClick={() => handleArtworkClick(node)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  handleArtworkClick(node, index);
+                  handleArtworkClick(node);
                 }
               }}
               loading={node.isCenterpiece || index < 10 ? "eager" : "lazy"}
@@ -613,16 +521,6 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
           );
         })}
       </div>
-
-      {/* ── Fullscreen Distraction-Free Artwork Viewer ── */}
-      <ArtworkViewer
-        nodes={artworkNodes}
-        artworks={artworks}
-        initialIndex={focusedArtworkIndex ?? 0}
-        isOpen={focusedArtworkIndex !== null}
-        onClose={() => setFocusedArtworkIndex(null)}
-        getCanvasRect={getCanvasRect}
-      />
     </main>
   );
 };
