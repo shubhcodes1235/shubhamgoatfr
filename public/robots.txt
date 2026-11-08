@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://shubhamgoatfr.netlify.app/sitemap.xml
-
+Sitemap: https://shubhamgoatfrr.vercel.app/sitemap.xml

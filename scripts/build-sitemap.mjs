@@ -16,7 +16,7 @@ spatialLayoutRaw.forEach((item) => {
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&apos;");
     const loc =
-      "https://shubhamgoatfr.netlify.app" +
+      "https://shubhamgoatfrr.vercel.app" +
       (art.image.startsWith("/") ? "" : "/") +
       art.image;
     imagesXml += `    <image:image>
@@ -30,7 +30,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://shubhamgoatfr.netlify.app/</loc>
+    <loc>https://shubhamgoatfrr.vercel.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 ${imagesXml}  </url>
