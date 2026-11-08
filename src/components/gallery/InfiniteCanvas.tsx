@@ -5,7 +5,6 @@ import {
   type CanvasArtworkNode,
 } from "@/hooks/useCollisionFreeCanvas";
 import { ArtworkViewer } from "@/components/gallery/ArtworkViewer";
-import GradualBlur from "@/components/ui/GradualBlur";
 import LightRays from "@/components/ui/LightRays";
 import { Plus, Minus, RotateCcw, Compass, ArrowUpRight } from "lucide-react";
 
@@ -515,40 +514,6 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
           className="w-full h-full"
         />
       </div>
-
-      {/* ── Progressive Edge Blur (React Bits GradualBlur) ── */}
-      <GradualBlur
-        position="top"
-        height="6rem"
-        strength={2}
-        layers={8}
-        curve="bezier"
-        exponential
-        tint="rgba(9, 9, 9, 0.75)"
-        target="page"
-        zIndex={35}
-        style={{
-          opacity: focusedArtworkIndex !== null ? 0 : 1,
-          transition: "opacity 0.4s ease",
-          pointerEvents: "none",
-        }}
-      />
-      <GradualBlur
-        position="bottom"
-        height="6rem"
-        strength={2}
-        layers={8}
-        curve="bezier"
-        exponential
-        tint="rgba(9, 9, 9, 0.75)"
-        target="page"
-        zIndex={35}
-        style={{
-          opacity: focusedArtworkIndex !== null ? 0 : 1,
-          transition: "opacity 0.4s ease",
-          pointerEvents: "none",
-        }}
-      />
 
       {/* ── Single GPU-Accelerated Stage Transform ── */}
       <div
