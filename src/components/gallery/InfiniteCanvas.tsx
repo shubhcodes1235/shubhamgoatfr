@@ -5,6 +5,8 @@ import {
   type CanvasArtworkNode,
 } from "@/hooks/useCollisionFreeCanvas";
 import { ArtworkViewer } from "@/components/gallery/ArtworkViewer";
+import GradualBlur from "@/components/ui/GradualBlur";
+import LightRays from "@/components/ui/LightRays";
 import { Plus, Minus, RotateCcw, Compass, ArrowUpRight } from "lucide-react";
 
 interface InfiniteCanvasProps {
@@ -491,6 +493,62 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
           <RotateCcw className="w-3.5 h-3.5" />
         </button>
       </nav>
+
+      {/* ── Atmospheric Exhibition Lighting (React Bits LightRays) ── */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-700"
+        style={{
+          opacity: focusedArtworkIndex !== null ? 0 : 0.45,
+        }}
+        aria-hidden="true"
+      >
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#ffffff"
+          raysSpeed={0.35}
+          lightSpread={0.85}
+          intensity={0.5}
+          glow={0.3}
+          haze={0.2}
+          followMouse={true}
+          mouseInfluence={0.15}
+          className="w-full h-full"
+        />
+      </div>
+
+      {/* ── Progressive Edge Blur (React Bits GradualBlur) ── */}
+      <GradualBlur
+        position="top"
+        height="6rem"
+        strength={2}
+        layers={8}
+        curve="bezier"
+        exponential
+        tint="rgba(9, 9, 9, 0.75)"
+        target="page"
+        zIndex={35}
+        style={{
+          opacity: focusedArtworkIndex !== null ? 0 : 1,
+          transition: "opacity 0.4s ease",
+          pointerEvents: "none",
+        }}
+      />
+      <GradualBlur
+        position="bottom"
+        height="6rem"
+        strength={2}
+        layers={8}
+        curve="bezier"
+        exponential
+        tint="rgba(9, 9, 9, 0.75)"
+        target="page"
+        zIndex={35}
+        style={{
+          opacity: focusedArtworkIndex !== null ? 0 : 1,
+          transition: "opacity 0.4s ease",
+          pointerEvents: "none",
+        }}
+      />
 
       {/* ── Single GPU-Accelerated Stage Transform ── */}
       <div
