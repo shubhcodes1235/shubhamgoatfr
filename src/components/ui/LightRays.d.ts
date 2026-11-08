@@ -40,3 +40,4 @@ export interface LightRaysProps {
 
 declare const LightRays: FC<LightRaysProps>;
 export default LightRays;
+

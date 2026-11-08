@@ -515,6 +515,28 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
         />
       </div>
 
+      {/* ── Atmospheric Exhibition Lighting (React Bits LightRays) ── */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-700"
+        style={{
+          opacity: focusedArtworkIndex !== null ? 0 : 0.45,
+        }}
+        aria-hidden="true"
+      >
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#ffffff"
+          raysSpeed={0.35}
+          lightSpread={0.85}
+          intensity={0.5}
+          glow={0.3}
+          haze={0.2}
+          followMouse={true}
+          mouseInfluence={0.15}
+          className="w-full h-full"
+        />
+      </div>
+
       {/* ── Single GPU-Accelerated Stage Transform ── */}
       <div
         ref={stageRef}
