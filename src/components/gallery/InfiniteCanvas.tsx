@@ -1,19 +1,29 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import type { Artwork } from "@/data/artworks";
-import {
-  useCollisionFreeCanvas,
-  type CanvasArtworkNode,
-} from "@/hooks/useCollisionFreeCanvas";
+import { useCollisionFreeCanvas } from "@/hooks/useCollisionFreeCanvas";
 import LightRays from "@/components/ui/LightRays";
-import { Plus, Minus, RotateCcw, Compass, ArrowUpRight } from "lucide-react";
+import { ArtworkFullscreenViewer } from "@/components/gallery/ArtworkFullscreenViewer";
+import { ExhibitionMinimap } from "@/components/gallery/ExhibitionMinimap";
+import {
+  Plus,
+  Minus,
+  RotateCcw,
+  Compass,
+  ArrowUpRight,
+  Play,
+  Pause,
+  Map as MapIcon,
+} from "lucide-react";
 
 interface InfiniteCanvasProps {
   artworks: Artwork[];
 }
 
-const MIN_ZOOM = 0.5; // Strictly bounded: artworks never become microscopic thumbnails
+const MIN_ZOOM = 0.45; // Strictly bounded: artworks never become microscopic thumbnails
 const MAX_ZOOM = 2.4; // High-detail inspection
 const DEFAULT_ZOOM = 0.95; // Initial zoom: Centerpiece commands ~55% of screen height
+const WORLD_CLAMP_X = 4200; // World boundary limits
+const WORLD_CLAMP_Y = 3400;
 
 export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,6 +37,13 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
     scale: typeof window !== "undefined" && window.innerWidth < 768 ? 0.65 : DEFAULT_ZOOM,
   });
 
+  // Camera state for synchronized mini-map view
+  const [cameraState, setCameraState] = useState(() => ({
+    x: typeof window !== "undefined" ? window.innerWidth / 2 : 600,
+    y: typeof window !== "undefined" ? window.innerHeight / 2 : 450,
+    scale: typeof window !== "undefined" && window.innerWidth < 768 ? 0.65 : DEFAULT_ZOOM,
+  }));
+
   // UI state for zoom level percentage display
   const [zoomPercent, setZoomPercent] = useState<number>(() =>
     Math.round(
@@ -36,14 +53,27 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
 
   // Frustum culling box in world coordinates
   const [cullBounds, setCullBounds] = useState({
-    minX: -1800,
-    maxX: 1800,
-    minY: -1800,
-    maxY: 1800,
+    minX: -2000,
+    maxX: 2000,
+    minY: -2000,
+    maxY: 2000,
   });
 
-  // Destination tracker for guided Discover mode
-  const [currentDestinationIdx, setCurrentDestinationIdx] = useState(0);
+  // Fullscreen artwork viewer index (null = closed)
+  const [viewerActiveIndex, setViewerActiveIndex] = useState<number | null>(null);
+
+  // Guided Exhibition Tour state
+  const [isTourActive, setIsTourActive] = useState(false);
+
+  // Mini-map visibility state (defaults open on desktop, collapsed on small screens)
+  const [isMinimapOpen, setIsMinimapOpen] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth >= 1024 : false
+  );
+
+  // Smart Discover: tracks visit count & last visit time per sector
+  const visitedSectorsRef = useRef<Map<number, { count: number; lastTime: number }>>(
+    new Map([[0, { count: 1, lastTime: 0 }]])
+  );
 
   // Pointer drag & momentum physics
   const isDraggingRef = useRef(false);
@@ -64,12 +94,12 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
     stageRef.current.style.transform = `translate3d(${x}px, ${y}px, 0px) scale(${scale})`;
   }, []);
 
-  // Update frustum bounds for off-screen culling (zero overhead for offscreen artworks)
-  const updateCulling = useCallback(() => {
+  // Update frustum bounds for off-screen culling and sync mini-map camera
+  const updateCullingAndSync = useCallback(() => {
     const { x, y, scale } = transformRef.current;
     const winW = typeof window !== "undefined" ? window.innerWidth : 1200;
     const winH = typeof window !== "undefined" ? window.innerHeight : 900;
-    const padding = 800; // Generous padding prevents visual popping during fast panning
+    const padding = 750; // Generous padding prevents visual popping during fast panning
 
     setCullBounds({
       minX: -x / scale - padding,
@@ -77,17 +107,31 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
       minY: -y / scale - padding,
       maxY: (winH - y) / scale + padding,
     });
+
+    setCameraState({ x, y, scale });
   }, []);
 
   // Set initial position
   useEffect(() => {
     applyTransform();
-    updateCulling();
-  }, [applyTransform, updateCulling]);
+    updateCullingAndSync();
+  }, [applyTransform, updateCullingAndSync]);
+
+  // Stop active tour on user interaction
+  const stopTour = useCallback(() => {
+    if (isTourActive) {
+      setIsTourActive(false);
+    }
+  }, [isTourActive]);
 
   // Smooth camera travel to specific world coordinate
   const smoothTravelTo = useCallback(
-    (targetWorldX: number, targetWorldY: number, targetScale = DEFAULT_ZOOM) => {
+    (
+      targetWorldX: number,
+      targetWorldY: number,
+      targetScale = DEFAULT_ZOOM,
+      customDuration = 750
+    ) => {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
 
       const winW = window.innerWidth;
@@ -99,14 +143,14 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
       const targetX = winW / 2 - targetWorldX * targetScale;
       const targetY = winH / 2 - targetWorldY * targetScale;
 
-      const duration = 750; // ms
       const startTime = performance.now();
-      const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+      const easeInOutCubic = (t: number) =>
+        t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
       const animate = (now: number) => {
         const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const ease = easeOutCubic(progress);
+        const progress = Math.min(elapsed / customDuration, 1);
+        const ease = easeInOutCubic(progress);
 
         transformRef.current.x = startX + (targetX - startX) * ease;
         transformRef.current.y = startY + (targetY - startY) * ease;
@@ -118,75 +162,214 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
           animFrameRef.current = requestAnimationFrame(animate);
         } else {
           setZoomPercent(Math.round(transformRef.current.scale * 100));
-          updateCulling();
+          updateCullingAndSync();
         }
       };
 
       animFrameRef.current = requestAnimationFrame(animate);
     },
-    [applyTransform, updateCulling]
+    [applyTransform, updateCullingAndSync]
   );
 
-  // Momentum coasting after pointer drag release
+  // Smooth relative panning for keyboard arrow navigation
+  const panBy = useCallback(
+    (dx: number, dy: number) => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+
+      const startX = transformRef.current.x;
+      const startY = transformRef.current.y;
+      const targetX = startX + dx;
+      const targetY = startY + dy;
+      const duration = 240;
+      const startTime = performance.now();
+      const easeOutQuad = (t: number) => 1 - (1 - t) * (1 - t);
+
+      const animate = (now: number) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = easeOutQuad(progress);
+
+        transformRef.current.x = startX + (targetX - startX) * ease;
+        transformRef.current.y = startY + (targetY - startY) * ease;
+
+        applyTransform();
+
+        if (progress < 1) {
+          animFrameRef.current = requestAnimationFrame(animate);
+        } else {
+          updateCullingAndSync();
+        }
+      };
+
+      animFrameRef.current = requestAnimationFrame(animate);
+    },
+    [applyTransform, updateCullingAndSync]
+  );
+
+  // Momentum coasting after pointer drag release with soft boundary resistance
   const startMomentum = useCallback(() => {
     const decay = 0.94;
     const step = () => {
       velocityRef.current.vx *= decay;
       velocityRef.current.vy *= decay;
 
+      const winW = typeof window !== "undefined" ? window.innerWidth : 1200;
+      const winH = typeof window !== "undefined" ? window.innerHeight : 900;
+      const cur = transformRef.current;
+      const curWorldCenterX = (winW / 2 - cur.x) / cur.scale;
+      const curWorldCenterY = (winH / 2 - cur.y) / cur.scale;
+
+      // Soft boundary dampening
+      if (Math.abs(curWorldCenterX) > WORLD_CLAMP_X) {
+        velocityRef.current.vx *= 0.8;
+      }
+      if (Math.abs(curWorldCenterY) > WORLD_CLAMP_Y) {
+        velocityRef.current.vy *= 0.8;
+      }
+
       if (
         Math.abs(velocityRef.current.vx) > 0.15 ||
         Math.abs(velocityRef.current.vy) > 0.15
       ) {
-        transformRef.current.x += velocityRef.current.vx;
-        transformRef.current.y += velocityRef.current.vy;
+        cur.x += velocityRef.current.vx;
+        cur.y += velocityRef.current.vy;
         applyTransform();
         animFrameRef.current = requestAnimationFrame(step);
       } else {
         velocityRef.current = { vx: 0, vy: 0 };
-        updateCulling();
+        updateCullingAndSync();
         if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       }
     };
 
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     animFrameRef.current = requestAnimationFrame(step);
-  }, [applyTransform, updateCulling]);
+  }, [applyTransform, updateCullingAndSync]);
 
-  // Guided "Discover" Travel
-  const handleDiscover = () => {
-    const nextIdx = (currentDestinationIdx + 1) % destinations.length;
-    setCurrentDestinationIdx(nextIdx);
-    const target = destinations[nextIdx];
-    smoothTravelTo(target.x, target.y, window.innerWidth < 768 ? 0.65 : DEFAULT_ZOOM);
-  };
+  // Smart Discover: navigates intelligently to artwork clusters not explored recently
+  const handleDiscover = useCallback(() => {
+    stopTour();
 
-  // Reset to the initial centerpiece at (0, 0)
-  const handleReset = () => {
-    setCurrentDestinationIdx(0);
-    smoothTravelTo(0, 0, window.innerWidth < 768 ? 0.65 : DEFAULT_ZOOM);
-  };
+    const cur = transformRef.current;
+    const winW = typeof window !== "undefined" ? window.innerWidth : 1200;
+    const winH = typeof window !== "undefined" ? window.innerHeight : 800;
+
+    const curWorldX = (winW / 2 - cur.x) / cur.scale;
+    const curWorldY = (winH / 2 - cur.y) / cur.scale;
+
+    const visitedMap = visitedSectorsRef.current;
+    const now = Date.now();
+
+    // Find destinations outside current view area
+    const candidates = destinations
+      .map((dest, idx) => {
+        const dist = Math.hypot(dest.x - curWorldX, dest.y - curWorldY);
+        const stats = visitedMap.get(idx) || { count: 0, lastTime: 0 };
+        return {
+          idx,
+          dest,
+          dist,
+          count: stats.count,
+          lastTime: stats.lastTime,
+        };
+      })
+      .filter((c) => c.dist > 750);
+
+    const pool =
+      candidates.length > 0
+        ? candidates
+        : destinations.map((dest, idx) => ({
+            idx,
+            dest,
+            dist: Math.hypot(dest.x - curWorldX, dest.y - curWorldY),
+            count: visitedMap.get(idx)?.count || 0,
+            lastTime: visitedMap.get(idx)?.lastTime || 0,
+          }));
+
+    // Prioritize least-visited clusters, then oldest visited
+    pool.sort((a, b) => {
+      if (a.count !== b.count) return a.count - b.count;
+      return a.lastTime - b.lastTime;
+    });
+
+    const chosen = pool[0];
+    if (chosen) {
+      visitedMap.set(chosen.idx, {
+        count: chosen.count + 1,
+        lastTime: now,
+      });
+      smoothTravelTo(
+        chosen.dest.x,
+        chosen.dest.y,
+        window.innerWidth < 768 ? 0.65 : DEFAULT_ZOOM,
+        950
+      );
+    }
+  }, [destinations, smoothTravelTo, stopTour]);
+
+  // Reset view to origin centerpiece
+  const handleReset = useCallback(() => {
+    stopTour();
+    smoothTravelTo(0, 0, window.innerWidth < 768 ? 0.65 : DEFAULT_ZOOM, 800);
+  }, [smoothTravelTo, stopTour]);
+
+  // Guided Exhibition Tour toggle
+  const toggleTour = useCallback(() => {
+    setIsTourActive((prev) => !prev);
+  }, []);
+
+  // Tour automated smooth transition timer
+  useEffect(() => {
+    if (!isTourActive) return;
+
+    // Sequence through prominent landmark clusters
+    const tourWaypoints = [
+      { x: 0, y: 0, scale: 0.95 },
+      { x: 1450, y: -200, scale: 0.9 },
+      { x: 1350, y: 1300, scale: 0.9 },
+      { x: 0, y: 1450, scale: 0.9 },
+      { x: -1400, y: 1300, scale: 0.9 },
+      { x: -1450, y: -150, scale: 0.9 },
+      { x: -1350, y: -1350, scale: 0.9 },
+      { x: 0, y: -1500, scale: 0.9 },
+      { x: 1350, y: -1350, scale: 0.9 },
+    ];
+
+    let currentWaypointIdx = 0;
+
+    const interval = setInterval(() => {
+      currentWaypointIdx = (currentWaypointIdx + 1) % tourWaypoints.length;
+      const wp = tourWaypoints[currentWaypointIdx];
+      smoothTravelTo(wp.x, wp.y, wp.scale, 1600);
+    }, 6200);
+
+    return () => clearInterval(interval);
+  }, [isTourActive, smoothTravelTo]);
 
   // Manual zoom buttons (+ / -)
-  const handleZoom = (factor: number) => {
-    const cur = transformRef.current;
-    const newScale = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, cur.scale * factor));
-    const winW = window.innerWidth;
-    const winH = window.innerHeight;
+  const handleZoom = useCallback(
+    (factor: number) => {
+      stopTour();
+      const cur = transformRef.current;
+      const newScale = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, cur.scale * factor));
+      const winW = window.innerWidth;
+      const winH = window.innerHeight;
 
-    const worldCenterX = (winW / 2 - cur.x) / cur.scale;
-    const worldCenterY = (winH / 2 - cur.y) / cur.scale;
+      const worldCenterX = (winW / 2 - cur.x) / cur.scale;
+      const worldCenterY = (winH / 2 - cur.y) / cur.scale;
 
-    cur.x = winW / 2 - worldCenterX * newScale;
-    cur.y = winH / 2 - worldCenterY * newScale;
-    cur.scale = newScale;
+      cur.x = winW / 2 - worldCenterX * newScale;
+      cur.y = winH / 2 - worldCenterY * newScale;
+      cur.scale = newScale;
 
-    applyTransform();
-    setZoomPercent(Math.round(newScale * 100));
-    updateCulling();
-  };
+      applyTransform();
+      setZoomPercent(Math.round(newScale * 100));
+      updateCullingAndSync();
+    },
+    [applyTransform, updateCullingAndSync, stopTour]
+  );
 
-  // Smooth mouse wheel zoom anchored to pointer position
+  // Smooth mouse wheel zoom anchored to cursor coordinates
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -194,10 +377,13 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
     let wheelDebounce: ReturnType<typeof setTimeout> | null = null;
 
     const handleWheel = (e: WheelEvent) => {
+      if (viewerActiveIndex !== null) return;
       e.preventDefault();
+      stopTour();
+
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
 
-      const zoomFactor = e.deltaY < 0 ? 1.08 : 0.92;
+      const zoomFactor = e.deltaY < 0 ? 1.09 : 0.91;
       const cur = transformRef.current;
       const newScale = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, cur.scale * zoomFactor));
 
@@ -216,8 +402,8 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
       if (wheelDebounce) clearTimeout(wheelDebounce);
       wheelDebounce = setTimeout(() => {
         setZoomPercent(Math.round(newScale * 100));
-        updateCulling();
-      }, 90);
+        updateCullingAndSync();
+      }, 70);
     };
 
     container.addEventListener("wheel", handleWheel, { passive: false });
@@ -225,12 +411,79 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
       container.removeEventListener("wheel", handleWheel);
       if (wheelDebounce) clearTimeout(wheelDebounce);
     };
-  }, [applyTransform, updateCulling]);
+  }, [applyTransform, updateCullingAndSync, viewerActiveIndex, stopTour]);
 
-  // Pointer drag events
+  // Keyboard navigation for movement, zooming, resetting, and features
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        (e.target as HTMLElement)?.tagName === "INPUT" ||
+        (e.target as HTMLElement)?.tagName === "TEXTAREA"
+      ) {
+        return;
+      }
+
+      if (viewerActiveIndex !== null) return; // Handled in modal
+
+      if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") {
+        e.preventDefault();
+        stopTour();
+        panBy(0, 240);
+      } else if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") {
+        e.preventDefault();
+        stopTour();
+        panBy(0, -240);
+      } else if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
+        e.preventDefault();
+        stopTour();
+        panBy(240, 0);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        stopTour();
+        panBy(-240, 0);
+      } else if (e.key === "+" || e.key === "=" || e.key === "]") {
+        e.preventDefault();
+        handleZoom(1.18);
+      } else if (e.key === "-" || e.key === "_" || e.key === "[") {
+        e.preventDefault();
+        handleZoom(0.85);
+      } else if (e.key === "0" || e.key === "r" || e.key === "R") {
+        e.preventDefault();
+        handleReset();
+      } else if (e.key === "d" || e.key === "D") {
+        e.preventDefault();
+        handleDiscover();
+      } else if (e.key === "t" || e.key === "T") {
+        e.preventDefault();
+        toggleTour();
+      } else if (e.key === "m" || e.key === "M") {
+        e.preventDefault();
+        setIsMinimapOpen((prev) => !prev);
+      } else if (e.key === "Escape") {
+        stopTour();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [
+    viewerActiveIndex,
+    handleZoom,
+    handleReset,
+    handleDiscover,
+    toggleTour,
+    stopTour,
+    panBy,
+  ]);
+
+  // Pointer drag events with boundary resistance
   const onPointerDown = (e: React.PointerEvent) => {
-    if ((e.target as HTMLElement).closest("button, a, header, nav")) return;
+    if (viewerActiveIndex !== null) return;
+    if ((e.target as HTMLElement).closest("button, a, header, nav, [role='dialog'], [role='region']")) {
+      return;
+    }
 
+    stopTour();
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
 
     isDraggingRef.current = true;
@@ -242,17 +495,28 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
-    if (!isDraggingRef.current) return;
+    if (viewerActiveIndex !== null || !isDraggingRef.current) return;
 
-    const dx = e.clientX - lastPosRef.current.x;
-    const dy = e.clientY - lastPosRef.current.y;
+    let dx = e.clientX - lastPosRef.current.x;
+    let dy = e.clientY - lastPosRef.current.y;
 
+    // Disambiguate drag vs tap (6px movement threshold)
     if (
-      Math.abs(e.clientX - dragStartRef.current.x) > 8 ||
-      Math.abs(e.clientY - dragStartRef.current.y) > 8
+      Math.abs(e.clientX - dragStartRef.current.x) > 6 ||
+      Math.abs(e.clientY - dragStartRef.current.y) > 6
     ) {
       didMoveRef.current = true;
     }
+
+    const cur = transformRef.current;
+    const winW = typeof window !== "undefined" ? window.innerWidth : 1200;
+    const winH = typeof window !== "undefined" ? window.innerHeight : 900;
+    const curWorldCenterX = (winW / 2 - cur.x) / cur.scale;
+    const curWorldCenterY = (winH / 2 - cur.y) / cur.scale;
+
+    // Apply boundary resistance
+    if (Math.abs(curWorldCenterX) > WORLD_CLAMP_X) dx *= 0.35;
+    if (Math.abs(curWorldCenterY) > WORLD_CLAMP_Y) dy *= 0.35;
 
     velocityRef.current = {
       vx: dx * 0.86,
@@ -260,9 +524,8 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
     };
 
     lastPosRef.current = { x: e.clientX, y: e.clientY };
-
-    transformRef.current.x += dx;
-    transformRef.current.y += dy;
+    cur.x += dx;
+    cur.y += dy;
 
     applyTransform();
   };
@@ -281,6 +544,8 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
 
   // Mobile pinch to zoom
   const onTouchStart = (e: React.TouchEvent) => {
+    if (viewerActiveIndex !== null) return;
+    stopTour();
     if (e.touches.length === 2) {
       const t1 = e.touches[0];
       const t2 = e.touches[1];
@@ -290,6 +555,7 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
+    if (viewerActiveIndex !== null) return;
     if (e.touches.length === 2 && pinchStartDistRef.current !== null) {
       const t1 = e.touches[0];
       const t2 = e.touches[1];
@@ -316,17 +582,19 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
   };
 
   const onTouchEnd = () => {
+    if (viewerActiveIndex !== null) return;
     if (pinchStartDistRef.current !== null) {
       pinchStartDistRef.current = null;
       setZoomPercent(Math.round(transformRef.current.scale * 100));
-      updateCulling();
+      updateCullingAndSync();
     }
   };
 
-  // Clicking an artwork: smoothly center the canvas camera on it
-  const handleArtworkClick = (node: CanvasArtworkNode) => {
-    if (didMoveRef.current) return; // Prevent triggering click upon drag release
-    smoothTravelTo(node.x, node.y, transformRef.current.scale);
+  // Clicking an artwork opens the fullscreen image-only exhibition viewer
+  const handleArtworkClick = (index: number) => {
+    if (didMoveRef.current) return; // Prevent triggering if user was dragging
+    stopTour();
+    setViewerActiveIndex(index);
   };
 
   return (
@@ -354,7 +622,12 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
       </section>
 
       {/* ── Minimalist Editorial Header ── */}
-      <header className="fixed top-0 inset-x-0 z-40 px-6 sm:px-8 py-5 flex items-center justify-between pointer-events-none select-none">
+      <header
+        aria-hidden={viewerActiveIndex !== null}
+        className={`fixed top-0 inset-x-0 z-40 px-6 sm:px-8 py-5 flex items-center justify-between pointer-events-none select-none transition-opacity duration-300 ${
+          viewerActiveIndex !== null ? "opacity-0" : "opacity-100"
+        }`}
+      >
         <div className="pointer-events-auto flex items-baseline gap-2">
           <h1 className="font-sans text-sm sm:text-base tracking-[0.2em] uppercase font-semibold text-neutral-100">
             Shubham Kumawat
@@ -378,26 +651,68 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
         </div>
       </header>
 
-      {/* ── Compact Navigation & Zoom Dock (Bottom Right) ── */}
+      {/* ── Compact Navigation & Exhibition Dock (Bottom Right) ── */}
       <nav
         aria-label="Exhibition controls"
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 p-1.5 rounded-full bg-[#111111]/90 backdrop-blur-md border border-white/6 shadow-2xl pointer-events-auto select-none"
+        aria-hidden={viewerActiveIndex !== null}
+        className={`fixed bottom-6 right-6 z-40 flex items-center gap-1.5 p-1.5 rounded-full bg-[#111111]/90 backdrop-blur-md border border-white/8 shadow-2xl transition-opacity duration-300 ${
+          viewerActiveIndex !== null
+            ? "opacity-0 pointer-events-none"
+            : "opacity-100 pointer-events-auto"
+        } select-none`}
       >
         <button
           onClick={handleDiscover}
-          className="flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-mono tracking-wider text-neutral-300 hover:text-white hover:bg-white/8 transition-all cursor-pointer"
-          title="Travel to next composition"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono tracking-wider text-neutral-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+          title="Smart Discover: Explore unvisited cluster (D)"
         >
           <Compass className="w-3.5 h-3.5 text-neutral-400" />
           <span className="hidden sm:inline">DISCOVER</span>
         </button>
 
-        <div className="w-px h-4 bg-white/8" />
+        <button
+          onClick={toggleTour}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono tracking-wider transition-all cursor-pointer ${
+            isTourActive
+              ? "bg-white/15 text-white font-medium"
+              : "text-neutral-300 hover:text-white hover:bg-white/10"
+          }`}
+          title={isTourActive ? "Pause guided tour (T)" : "Start guided tour (T)"}
+        >
+          {isTourActive ? (
+            <>
+              <Pause className="w-3.5 h-3.5 text-white animate-pulse" />
+              <span className="hidden sm:inline">PAUSE TOUR</span>
+            </>
+          ) : (
+            <>
+              <Play className="w-3.5 h-3.5 text-neutral-400" />
+              <span className="hidden sm:inline">TOUR</span>
+            </>
+          )}
+        </button>
+
+        <div className="w-px h-4 bg-white/10" />
+
+        <button
+          onClick={() => setIsMinimapOpen((prev) => !prev)}
+          className={`p-1.5 rounded-full transition-colors cursor-pointer ${
+            isMinimapOpen
+              ? "bg-white/15 text-white"
+              : "text-neutral-400 hover:text-white hover:bg-white/10"
+          }`}
+          title={isMinimapOpen ? "Hide mini-map (M)" : "Show mini-map (M)"}
+          aria-label="Toggle mini-map"
+        >
+          <MapIcon className="w-3.5 h-3.5" />
+        </button>
+
+        <div className="w-px h-4 bg-white/10" />
 
         <button
           onClick={() => handleZoom(0.85)}
-          className="p-1.5 text-neutral-400 hover:text-white rounded-full hover:bg-white/8 transition-colors cursor-pointer"
-          title="Zoom Out"
+          className="p-1.5 text-neutral-400 hover:text-white rounded-full hover:bg-white/10 transition-colors cursor-pointer"
+          title="Zoom Out (-)"
           aria-label="Zoom out"
         >
           <Minus className="w-3.5 h-3.5" />
@@ -409,29 +724,48 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
 
         <button
           onClick={() => handleZoom(1.18)}
-          className="p-1.5 text-neutral-400 hover:text-white rounded-full hover:bg-white/8 transition-colors cursor-pointer"
-          title="Zoom In"
+          className="p-1.5 text-neutral-400 hover:text-white rounded-full hover:bg-white/10 transition-colors cursor-pointer"
+          title="Zoom In (+)"
           aria-label="Zoom in"
         >
           <Plus className="w-3.5 h-3.5" />
         </button>
 
-        <div className="w-px h-4 bg-white/8" />
+        <div className="w-px h-4 bg-white/10" />
 
         <button
           onClick={handleReset}
-          className="p-1.5 text-neutral-400 hover:text-white rounded-full hover:bg-white/8 transition-colors cursor-pointer"
-          title="Reset to Centerpiece"
+          className="p-1.5 text-neutral-400 hover:text-white rounded-full hover:bg-white/10 transition-colors cursor-pointer"
+          title="Reset to Centerpiece (0 / R)"
           aria-label="Reset view"
         >
           <RotateCcw className="w-3.5 h-3.5" />
         </button>
       </nav>
 
+      {/* ── Interactive Exhibition Mini-Map (Bottom Left) ── */}
+      <div
+        aria-hidden={viewerActiveIndex !== null}
+        className={`transition-opacity duration-300 ${
+          viewerActiveIndex !== null ? "opacity-0 pointer-events-none" : "opacity-100 pointer-events-auto"
+        }`}
+      >
+        <ExhibitionMinimap
+          nodes={artworkNodes}
+          camera={cameraState}
+          isOpen={isMinimapOpen}
+          onToggle={() => setIsMinimapOpen((prev) => !prev)}
+          onNavigate={(targetWX, targetWY) => {
+            stopTour();
+            smoothTravelTo(targetWX, targetWY, transformRef.current.scale, 650);
+          }}
+        />
+      </div>
+
       {/* ── Atmospheric Exhibition Lighting (React Bits LightRays) ── */}
       <div
-        className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
-        style={{ opacity: 0.45 }}
+        className="absolute inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-500"
+        style={{ opacity: viewerActiveIndex !== null ? 0 : 0.45 }}
         aria-hidden="true"
       >
         <LightRays
@@ -451,7 +785,10 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
       {/* ── Single GPU-Accelerated Stage Transform ── */}
       <div
         ref={stageRef}
-        className="absolute inset-0 origin-top-left will-change-transform"
+        aria-hidden={viewerActiveIndex !== null}
+        className={`absolute inset-0 origin-top-left will-change-transform ${
+          viewerActiveIndex !== null ? "pointer-events-none" : ""
+        }`}
       >
         {/* Subtle Spatial Orientation Watermarks */}
         {destinations.map((d, idx) => (
@@ -465,7 +802,7 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
               height: 1400,
             }}
           >
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-[12px] tracking-[0.35em] uppercase text-neutral-800/60 whitespace-nowrap">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-[12px] tracking-[0.35em] uppercase text-neutral-800/40 whitespace-nowrap">
               {d.title}
             </div>
           </div>
@@ -473,10 +810,11 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
 
         {/* 
           144 Artworks Displayed Directly on Canvas:
-          - NO black background containers
-          - NO artificial padding or frames
-          - Zero overlap (computed with strict clearance boundaries)
-          - Natural pixel proportions matching each artwork's native aspect ratio
+          - Natural pixel proportions matching native aspect ratio
+          - Zero overlap with balanced clearances
+          - High-performance frustum culling
+          - Smooth enter/exit transition
+          - Responsive hover depth with elevation
         */}
         {artworkNodes.map((node, index) => {
           // Viewport culling
@@ -493,23 +831,23 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
               key={node.id}
               data-artwork-id={node.id}
               src={node.artwork.image}
-              alt={`${node.artwork.title} — ${node.artwork.category} design by Shubham Kumawat (Shubhamgoatfr)`}
+              alt=""
               width={Math.round(node.width)}
               height={Math.round(node.height)}
-              tabIndex={0}
+              tabIndex={viewerActiveIndex !== null ? -1 : 0}
               role="button"
-              aria-label={`Center ${node.artwork.title} (${node.artwork.category})`}
-              onClick={() => handleArtworkClick(node)}
+              aria-label={`View artwork ${node.id}`}
+              onClick={() => handleArtworkClick(index)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  handleArtworkClick(node);
+                  handleArtworkClick(index);
                 }
               }}
-              loading={node.isCenterpiece || index < 10 ? "eager" : "lazy"}
+              loading={node.isCenterpiece || index < 12 ? "eager" : "lazy"}
               fetchPriority={node.isCenterpiece ? "high" : "auto"}
               decoding="async"
-              className="absolute block object-contain cursor-pointer transition-transform duration-300 ease-out hover:scale-[1.03] hover:z-30 select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]"
+              className="absolute block object-contain cursor-pointer transition-[transform,box-shadow,opacity] duration-300 ease-out hover:scale-[1.03] hover:z-30 hover:shadow-[0_20px_45px_rgba(0,0,0,0.9)] select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909] animate-fadeIn"
               style={{
                 left: node.x - node.width / 2,
                 top: node.y - node.height / 2,
@@ -521,6 +859,14 @@ export const InfiniteCanvas: React.FC<InfiniteCanvasProps> = ({ artworks }) => {
           );
         })}
       </div>
+
+      {/* ── Distraction-Free Fullscreen Image-Only Viewer ── */}
+      <ArtworkFullscreenViewer
+        nodes={artworkNodes}
+        activeIndex={viewerActiveIndex}
+        onClose={() => setViewerActiveIndex(null)}
+        onNavigate={(newIndex) => setViewerActiveIndex(newIndex)}
+      />
     </main>
   );
 };
